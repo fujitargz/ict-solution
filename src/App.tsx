@@ -1,19 +1,19 @@
 import { MantineProvider } from '@mantine/core'
 import '@mantine/core/styles.css'
 import { UsersContextProvider } from './contexts/users'
+import { SessionContextProvider } from './contexts/session'
 import { Frame } from './components/Frame'
-import { useUsers } from './hooks/useUsers'
+import { Router } from './components/Router'
 
 function App() {
-  const users = useUsers()
   return (
     <MantineProvider>
       <UsersContextProvider>
-        <Frame>
-          {users.map(({ id, name }) => (
-            <div key={id}>{name}</div>
-          ))}
-        </Frame>
+        <SessionContextProvider>
+          <Frame>
+            <Router />
+          </Frame>
+        </SessionContextProvider>
       </UsersContextProvider>
     </MantineProvider>
   )
