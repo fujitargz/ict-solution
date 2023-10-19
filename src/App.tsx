@@ -1,9 +1,10 @@
 import { MantineProvider } from '@mantine/core'
 import '@mantine/core/styles.css'
+import { RouterProvider } from 'react-router-dom'
+import { Router } from './Router'
 import { UsersContextProvider } from './contexts/users'
 import { SessionContextProvider } from './contexts/session'
 import { Frame } from './components/Frame'
-import { Router } from './components/Router'
 
 function App() {
   return (
@@ -11,7 +12,7 @@ function App() {
       <UsersContextProvider>
         <SessionContextProvider>
           <Frame>
-            <Router />
+            <RouterProvider router={Router} />
           </Frame>
         </SessionContextProvider>
       </UsersContextProvider>
