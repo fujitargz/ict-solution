@@ -3,12 +3,16 @@ import { usersData } from '../data/users'
 
 type StateType = typeof usersData
 
-type ActionType = { type: 'create'; user: (typeof usersData)[number] }
+type ActionType = { type: 'create'; name: string; password: string }
 
 const reducer = (state: StateType, action: ActionType): StateType => {
   switch (action.type) {
     case 'create': {
-      return [...state, action.user]
+      const newId = state.reduce((ctr, { id }) => (id > ctr ? id : ctr), 0)
+      return [
+        ...state,
+        { id: newId, name: action.name, password: action.password },
+      ]
     }
   }
 }
