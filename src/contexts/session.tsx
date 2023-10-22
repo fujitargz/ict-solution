@@ -39,8 +39,10 @@ const reducer =
 
 const initState: StateType = { successLogIn: 'yet', isLoggedIn: false }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const sessionContext = createContext<StateType>(initState)
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const sessionDispatchContext = createContext<Dispatch<ActionType>>(
   () => {},
 )

@@ -19,8 +19,10 @@ const reducer = (state: StateType, action: ActionType): StateType => {
 
 const initState: StateType = usersData
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const usersContext = createContext(initState)
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const usersDispatchContext = createContext<Dispatch<ActionType>>(
   () => {},
 )
