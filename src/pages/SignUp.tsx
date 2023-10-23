@@ -8,19 +8,19 @@ import {
   Text,
 } from '@mantine/core'
 import { useNavigate } from 'react-router-dom'
-import { useSession } from '../hooks/useSession'
 import { useSessionDispatch } from '../hooks/useSessionDispatch'
+import { useUsersDispatch } from '../hooks/useUsersDispatch'
 
-export const Login = () => {
+export const SignUp = () => {
   const [name, setName] = useState('')
   const [password, setPassword] = useState('')
-  const session = useSession()
   const sessionDispatch = useSessionDispatch()
+  const userDispatch = useUsersDispatch()
   const navigate = useNavigate()
   return (
     <Stack>
       <Center>
-        <Text size="xl">ログイン</Text>
+        <Text size="xl">新規登録</Text>
       </Center>
       <Input
         placeholder="name"
@@ -34,22 +34,22 @@ export const Login = () => {
       />
       <Button
         onClick={() => {
+          userDispatch({ type: 'create', name, password })
           sessionDispatch({ type: 'login', name, password })
           navigate('/')
         }}
       >
-        ログイン
+        登録してログイン
       </Button>
       <Button
         variant="filled"
         color="green"
         onClick={() => {
-          navigate('/signup')
+          navigate('/login')
         }}
       >
-        新規登録画面へ
+        ログイン画面へ
       </Button>
-      {session.successLogIn === false && <Text>ログイン失敗</Text>}
     </Stack>
   )
 }
