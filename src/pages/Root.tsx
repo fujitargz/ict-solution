@@ -25,6 +25,10 @@ export const Root = () => {
         モバイルバッテリーを貸す
       </Button>
       <Space />
+      <Button variant="filled" color="green" onClick={() => navigate('/tos')}>
+        紛失した時は...
+      </Button>
+      <Space />
       <Text>ログイン中のユーザ：{session.currentUser.name}</Text>
       <Button
         variant="filled"

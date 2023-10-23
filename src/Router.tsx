@@ -4,6 +4,7 @@ import { Login } from './pages/Login'
 import { RentFrom } from './pages/RentFrom'
 import { RentTo } from './pages/RentTo'
 import { SignUp } from './pages/SignUp'
+import { TOS } from './pages/TOS'
 
 export const Router = createBrowserRouter(
   [
@@ -16,10 +17,6 @@ export const Router = createBrowserRouter(
       element: <Login />,
     },
     {
-      path: '/signup',
-      element: <SignUp />,
-    },
-    {
       path: '/rentfrom',
       element: <RentFrom />,
     },
@@ -27,6 +24,11 @@ export const Router = createBrowserRouter(
       path: '/rentto',
       element: <RentTo />,
     },
+    {
+      path: '/signup',
+      element: <SignUp />,
+    },
+    { path: '/tos', element: <TOS /> },
   ],
   { basename: '/ict-solution' },
 )
