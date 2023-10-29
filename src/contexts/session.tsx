@@ -1,64 +1,47 @@
-import { Dispatch, createContext, useReducer, ReactNode } from 'react'
-import { useUsers } from '../hooks/useUsers'
+import { createContext, ReactNode } from 'react'
+import { useSessionStorage } from '@mantine/hooks'
+import { User } from '../mocks/handlers'
 
-type StateType =
+export type StateType =
   | {
       successLogIn: boolean | 'yet'
       isLoggedIn: true
-      currentUser: ReturnType<typeof useUsers>[number]
+      currentUser: User
     }
   | {
       successLogIn: boolean | 'yet'
       isLoggedIn: false
     }
 
-type ActionType =
-  | { type: 'login'; name: string; password: string }
-  | { type: 'logout' }
-
-const reducer =
-  (users: ReturnType<typeof useUsers>) =>
-  (state: StateType, action: ActionType): StateType => {
-    switch (action.type) {
-      case 'login': {
-        const result = users.find(
-          ({ name, password }) =>
-            name === action.name && password === action.password,
-        )
-        if (result !== undefined) {
-          return { successLogIn: true, isLoggedIn: true, currentUser: result }
-        } else {
-          return { ...state, successLogIn: false }
-        }
-      }
-      case 'logout': {
-        return { successLogIn: 'yet', isLoggedIn: false }
-      }
-    }
-  }
-
-const initState: StateType = { successLogIn: 'yet', isLoggedIn: false }
+// eslint-disable-next-line react-refresh/only-export-components
+export const initState: StateType = { successLogIn: 'yet', isLoggedIn: false }
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const sessionContext = createContext<StateType>(initState)
+export const sessionContext =
+  createContext<ReturnType<typeof useSessionStorage<StateType>>[0]>(initState)
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const sessionDispatchContext = createContext<Dispatch<ActionType>>(
-  () => {},
-)
+export const setSessionContext = createContext<
+  ReturnType<typeof useSessionStorage<StateType>>[1]
+>(() => {})
 
 export const SessionContextProvider = ({
   children,
 }: {
   children: ReactNode
 }) => {
-  const users = useUsers()
-  const [state, dispatch] = useReducer(reducer(users), initState)
+  const [session, setSession] = useSessionStorage<StateType>({
+    key: 'login',
+    defaultValue: initState,
+    getInitialValueInEffect: true,
+    serialize: (v) => JSON.stringify(v),
+    deserialize: (v) => JSON.parse(v as string),
+  })
   return (
-    <sessionContext.Provider value={state}>
-      <sessionDispatchContext.Provider value={dispatch}>
+    <sessionContext.Provider value={session as StateType}>
+      <setSessionContext.Provider value={setSession}>
         {children}
-      </sessionDispatchContext.Provider>
+      </setSessionContext.Provider>
     </sessionContext.Provider>
   )
 }

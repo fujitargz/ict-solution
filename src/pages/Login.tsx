@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Button,
   Center,
@@ -7,16 +7,53 @@ import {
   Stack,
   Text,
 } from '@mantine/core'
-import { useNavigate } from 'react-router-dom'
-import { useSession } from '../hooks/useSession'
-import { useSessionDispatch } from '../hooks/useSessionDispatch'
+import { useNavigate, Navigate } from 'react-router-dom'
+import { useSession, checkSessionManually } from '../hooks/useSession'
+import { useSetSession } from '../hooks/useSetSession'
+import { endpoint } from '../mocks/handlers'
 
 export const Login = () => {
   const [name, setName] = useState('')
   const [password, setPassword] = useState('')
-  const session = useSession()
-  const sessionDispatch = useSessionDispatch()
+  const [session, initSession] = useSession()
+  const setSession = useSetSession()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if (session === undefined) {
+      setSession(initSession)
+    }
+  }, [session, initSession, setSession])
+
+  if (!session?.isLoggedIn) {
+    const checkedSession = checkSessionManually()
+    if (checkedSession.isLoggedIn) {
+      return <Navigate to="/" />
+    }
+  }
+
+  const handleLoginButtonClick = () =>
+    fetch(endpoint('login'), {
+      body: JSON.stringify({ name, password }),
+      method: 'POST',
+    })
+      .then((res) => {
+        if (!res.ok) {
+          setSession({ ...(session ?? initSession), successLogIn: false })
+          throw new Error()
+        }
+        return res.json()
+      })
+      .then(({ user }) =>
+        setSession({
+          successLogIn: true,
+          isLoggedIn: true,
+          currentUser: user,
+        }),
+      )
+      .then(() => navigate('/'))
+      .catch(() => {})
+
   return (
     <Stack>
       <Center>
@@ -32,14 +69,7 @@ export const Login = () => {
         value={password}
         onChange={(e) => setPassword(e.currentTarget.value)}
       />
-      <Button
-        onClick={() => {
-          sessionDispatch({ type: 'login', name, password })
-          navigate('/')
-        }}
-      >
-        ログイン
-      </Button>
+      <Button onClick={handleLoginButtonClick}>ログイン</Button>
       <Button
         variant="filled"
         color="green"
@@ -49,7 +79,9 @@ export const Login = () => {
       >
         新規登録画面へ
       </Button>
-      {session.successLogIn === false && <Text>ログイン失敗</Text>}
+      {(session as NonNullable<typeof session>).successLogIn === false && (
+        <Text>ログイン失敗</Text>
+      )}
     </Stack>
   )
 }

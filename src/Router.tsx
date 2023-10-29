@@ -30,5 +30,5 @@ export const Router = createBrowserRouter(
     },
     { path: '/tos', element: <TOS /> },
   ],
-  { basename: '/ict-solution' },
+  { basename: '/ict-solution/' },
 )

@@ -8,15 +8,58 @@ import {
   Text,
 } from '@mantine/core'
 import { useNavigate } from 'react-router-dom'
-import { useSessionDispatch } from '../hooks/useSessionDispatch'
-import { useUsersDispatch } from '../hooks/useUsersDispatch'
+import { useSession } from '../hooks/useSession'
+import { useSetSession } from '../hooks/useSetSession'
+import { endpoint } from '../mocks/handlers'
 
 export const SignUp = () => {
   const [name, setName] = useState('')
   const [password, setPassword] = useState('')
-  const sessionDispatch = useSessionDispatch()
-  const userDispatch = useUsersDispatch()
+  const [session, initSession] = useSession()
+  const setSession = useSetSession()
   const navigate = useNavigate()
+
+  const handleSingUpButtonClick = () => {
+    fetch(endpoint('user'), {
+      body: JSON.stringify({ name, password }),
+      method: 'POST',
+    })
+      .then((res) => {
+        if (!res.ok) {
+          setSession({ ...(session ?? initSession), successLogIn: false })
+          throw new Error()
+        }
+        return res.json()
+      })
+      .then(({ user }) => {
+        setSession({
+          successLogIn: true,
+          isLoggedIn: true,
+          currentUser: user,
+        })
+        return fetch(endpoint('login'), {
+          body: JSON.stringify({ name, password }),
+          method: 'POST',
+        })
+      })
+      .then((res) => {
+        if (!res.ok) {
+          setSession({ ...(session ?? initSession), successLogIn: false })
+          throw new Error()
+        }
+        return res.json()
+      })
+      .then(({ user }) => {
+        setSession({
+          successLogIn: true,
+          isLoggedIn: true,
+          currentUser: user,
+        })
+        navigate('/')
+      })
+      .catch(() => navigate('/login'))
+  }
+
   return (
     <Stack>
       <Center>
@@ -32,15 +75,7 @@ export const SignUp = () => {
         value={password}
         onChange={(e) => setPassword(e.currentTarget.value)}
       />
-      <Button
-        onClick={() => {
-          userDispatch({ type: 'create', name, password })
-          sessionDispatch({ type: 'login', name, password })
-          navigate('/')
-        }}
-      >
-        登録してログイン
-      </Button>
+      <Button onClick={handleSingUpButtonClick}>登録してログイン</Button>
       <Button
         variant="filled"
         color="green"

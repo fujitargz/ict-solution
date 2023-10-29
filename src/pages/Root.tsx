@@ -1,15 +1,21 @@
 import { Navigate, useNavigate } from 'react-router-dom'
 import { Button, Space, Stack, Text } from '@mantine/core'
-import { useSession } from '../hooks/useSession'
-import { useSessionDispatch } from '../hooks/useSessionDispatch'
+import { useSession, checkSessionManually } from '../hooks/useSession'
+import { useSetSession, setSessionManually } from '../hooks/useSetSession'
 
 export const Root = () => {
-  const session = useSession()
-  const dispatch = useSessionDispatch()
+  const [session] = useSession()
+  const setSession = useSetSession()
   const navigate = useNavigate()
 
-  if (!session.isLoggedIn) {
-    return <Navigate to="/login" />
+  if (!session?.isLoggedIn) {
+    const checkedSession = checkSessionManually()
+    if (checkedSession.isLoggedIn) {
+      setSessionManually(checkedSession)
+      return <></>
+    } else {
+      return <Navigate to="/login" />
+    }
   }
 
   return (
@@ -33,7 +39,12 @@ export const Root = () => {
       <Button
         variant="filled"
         color="red"
-        onClick={() => dispatch({ type: 'logout' })}
+        onClick={() =>
+          setSession({
+            successLogIn: 'yet',
+            isLoggedIn: false,
+          })
+        }
       >
         ログアウト
       </Button>
