@@ -75,6 +75,9 @@ export const SignUp = () => {
         value={password}
         onChange={(e) => setPassword(e.currentTarget.value)}
       />
+      <Button variant="transparent" onClick={() => navigate('/tos')}>
+        利用規約を確認する
+      </Button>
       <Button onClick={handleSingUpButtonClick}>登録してログイン</Button>
       <Button
         variant="filled"

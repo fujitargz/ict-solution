@@ -10,7 +10,7 @@ export const TOS = () => {
       <Text size="xl">利用規約</Text>
       <Space />
       <Text>{[txt1, txt2, txt1].join('\n')}</Text>
-      <Button onClick={() => navigate('/')}>戻る</Button>
+      <Button onClick={() => navigate(-1)}>戻る</Button>
     </Stack>
   )
 }
