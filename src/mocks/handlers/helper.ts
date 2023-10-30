@@ -18,3 +18,11 @@ export type User = {
   name: string
   password: string
 }
+
+export type Battery = {
+  id: string
+  name: string
+  connector: string
+  note: string
+  ownerId: string
+}

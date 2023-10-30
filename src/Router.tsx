@@ -5,6 +5,8 @@ import { RentFrom } from './pages/RentFrom'
 import { RentTo } from './pages/RentTo'
 import { SignUp } from './pages/SignUp'
 import { TOS } from './pages/TOS'
+import { Register as BatteryRegister } from './pages/battery/Register'
+import { Start as RentToStart } from './pages/rentto/Start'
 
 export const Router = createBrowserRouter(
   [
@@ -25,10 +27,15 @@ export const Router = createBrowserRouter(
       element: <RentTo />,
     },
     {
+      path: '/rentto/start',
+      element: <RentToStart />,
+    },
+    {
       path: '/signup',
       element: <SignUp />,
     },
     { path: '/tos', element: <TOS /> },
+    { path: '/battery/register', element: <BatteryRegister /> },
   ],
   { basename: '/ict-solution/' },
 )

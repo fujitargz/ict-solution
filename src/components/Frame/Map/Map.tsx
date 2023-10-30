@@ -10,7 +10,7 @@ const DefaultIcon = L.icon({
 
 L.Marker.prototype.options.icon = DefaultIcon
 
-export const Map = () => (
+export const Map = ({ lat, lng }: { lat: number; lng: number }) => (
   <MapContainer
     center={[36.57332723779, 140.64191798417]}
     zoom={12}
@@ -21,6 +21,6 @@ export const Map = () => (
       attribution="<a href='https://maps.gsi.go.jp/development/ichiran.html’target='_blank'> 地理院タイル</a> "
       url="https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png"
     />
-    <Marker position={[36.57332723779, 140.64191798417]}></Marker>
+    <Marker position={[lat, lng]}></Marker>
   </MapContainer>
 )
