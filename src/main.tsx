@@ -4,8 +4,9 @@ import App from './App.tsx'
 import './index.css'
 import { worker } from './mocks/browser.ts'
 import packageJson from '../package.json'
+import { StartOptions } from 'msw/browser'
 
-const mswConfig =
+const mswConfig: StartOptions =
   process.env.NODE_ENV === 'development'
     ? {
         onUnhandledRequest: 'bypass',
