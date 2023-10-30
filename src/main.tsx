@@ -11,13 +11,13 @@ const mswConfig: StartOptions =
     ? {
         onUnhandledRequest: 'bypass',
         serviceWorker: {
-          options: { scope: '/ict-solution' },
+          options: { scope: '/ict-solution/' },
         },
       }
     : {
         onUnhandledRequest: 'bypass',
         serviceWorker: {
-          options: { scope: '/ict-solution' },
+          options: { scope: '/ict-solution/' },
           url: `${packageJson.homepage}/mockServiceWorker.js`,
         },
       }
