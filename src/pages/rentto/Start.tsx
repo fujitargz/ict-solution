@@ -9,7 +9,6 @@ import { Map } from '../../components/Frame/Map'
 export const Start = () => {
   const [session] = useSession()
   const navigate = useNavigate()
-  const [id, setId] = useState('')
   const [name, setName] = useState('')
   const [lat] = useState(36.57332723779)
   const [lng] = useState(140.64191798417)
@@ -33,8 +32,7 @@ export const Start = () => {
         return res.json()
       })
       .then((body) => {
-        const { id, name } = body as Battery
-        setId(id)
+        const { name } = body as Battery
         setName(name)
       })
       .catch(() => navigate('/battery/register'))
