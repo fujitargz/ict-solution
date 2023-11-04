@@ -5,7 +5,7 @@ import { useSession, checkSessionManually } from '../../hooks/useSession'
 import { setSessionManually } from '../../hooks/useSetSession'
 import { endpoint, Battery } from '../../mocks/handlers'
 import { useEffect, useState } from 'react'
-import { Map } from '../../components/Frame/Map'
+import { Map } from '../../components/Map'
 
 export const Start = () => {
   const [session] = useSession()

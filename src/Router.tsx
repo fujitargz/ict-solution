@@ -7,35 +7,55 @@ import { SignUp } from './pages/SignUp'
 import { TOS } from './pages/TOS'
 import { Register as BatteryRegister } from './pages/battery/Register'
 import { Start as RentToStart } from './pages/rentto/Start'
+import { FrameWithInit } from './components/FrameWithInit'
+import { FramwWithBack } from './components/FrameWithBack'
+import { FrameWithFooter } from './components/FrameWithFooter'
 
 export const Router = createBrowserRouter(
   [
     {
       path: '/',
-      element: <Root />,
+      element: <FrameWithFooter />,
+      index: false,
+      children: [
+        {
+          path: '/',
+          element: <Root />,
+        },
+        {
+          path: '/rentfrom',
+          element: <RentFrom />,
+        },
+        {
+          path: '/rentto',
+          element: <RentTo />,
+        },
+        {
+          path: '/rentto/start',
+          element: <RentToStart />,
+        },
+        { path: '/battery/register', element: <BatteryRegister /> },
+      ],
     },
     {
-      path: '/login',
-      element: <Login />,
+      path: '/',
+      element: <FrameWithInit />,
+      children: [
+        {
+          path: '/login',
+          element: <Login />,
+        },
+        {
+          path: '/signup',
+          element: <SignUp />,
+        },
+      ],
     },
     {
-      path: '/rentfrom',
-      element: <RentFrom />,
+      path: '/',
+      element: <FramwWithBack />,
+      children: [{ path: '/tos', element: <TOS /> }],
     },
-    {
-      path: '/rentto',
-      element: <RentTo />,
-    },
-    {
-      path: '/rentto/start',
-      element: <RentToStart />,
-    },
-    {
-      path: '/signup',
-      element: <SignUp />,
-    },
-    { path: '/tos', element: <TOS /> },
-    { path: '/battery/register', element: <BatteryRegister /> },
   ],
   { basename: '/ict-solution/' },
 )
