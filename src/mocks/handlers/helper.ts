@@ -26,3 +26,14 @@ export type Battery = {
   note: string
   ownerId: string
 }
+
+export type Rental = {
+  id: string
+  batteryId: string
+  borrowerId: string
+  due: string
+  lat: string
+  lng: string
+  status: string
+  otp: string
+}

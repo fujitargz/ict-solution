@@ -15,7 +15,7 @@ export const Map = ({ lat, lng }: { lat: number; lng: number }) => (
     center={[36.57332723779, 140.64191798417]}
     zoom={12}
     scrollWheelZoom={false}
-    style={{ width: '320px', height: '240px' }}
+    style={{ width: '320px', height: '240px', zIndex: '-1' }}
   >
     <TileLayer
       attribution="<a href='https://maps.gsi.go.jp/development/ichiran.html’target='_blank'> 地理院タイル</a> "

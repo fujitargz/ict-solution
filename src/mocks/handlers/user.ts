@@ -60,7 +60,7 @@ export const userHandlers = [
 
   // idで指定されたユーザを更新
   http.put<{ id: string }, { name: string; password: string }>(
-    endpoint('user'),
+    endpoint('user', ':id'),
     ({ params, request }) => {
       const { id } = params
       request.json().then((body) => {
