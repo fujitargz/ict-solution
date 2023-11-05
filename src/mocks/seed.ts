@@ -23,5 +23,4 @@ export const seed = () => {
     )
     .then((res) => res.json())
     .then(({ battery }) => battery as Battery)
-    .then(() => location.reload())
 }
