@@ -23,7 +23,5 @@ export const seed = () => {
     )
     .then((res) => res.json())
     .then(({ battery }) => battery as Battery)
-    .then(() => {
-      location.href = '/ict-solution/login'
-    })
+    .then(() => location.reload())
 }
