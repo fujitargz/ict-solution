@@ -13,7 +13,7 @@ export const batteryHandlers = [
       return HttpResponse.json({ batteries: [] })
     }
 
-    return HttpResponse.json({ batteries: JSON.parse(storage) })
+    return HttpResponse.json({ batteries: parseStorage(storage) })
   }),
 
   // idで指定されたバッテリーを取得

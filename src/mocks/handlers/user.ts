@@ -12,7 +12,7 @@ export const userHandlers = [
       return HttpResponse.json({ users: [] })
     }
 
-    return HttpResponse.json({ users: JSON.parse(storage) })
+    return HttpResponse.json({ users: parseStorage(storage) })
   }),
 
   // idで指定されたユーザを取得

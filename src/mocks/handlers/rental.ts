@@ -1,8 +1,15 @@
 import { http, HttpResponse, PathParams } from 'msw'
-import { accessLocalStorage, endpoint, Rental } from './helper'
+import { accessLocalStorage, endpoint, Battery, Rental, User } from './helper'
 
 const [getStorage, setStorage, parseStorage] = accessLocalStorage<Rental>(
   'ict-solution-rental',
+)
+
+const [getUserStorage, , parseUserStorage] =
+  accessLocalStorage<User>('ict-solution-user')
+
+const [getBatteryStorage, , parseBatteryStorage] = accessLocalStorage<Battery>(
+  'ict-solution-battery',
 )
 
 export const rentalHandlers = [
@@ -13,7 +20,37 @@ export const rentalHandlers = [
       return HttpResponse.json({ rentals: [] })
     }
 
-    return HttpResponse.json({ rentals: JSON.parse(storage) })
+    return HttpResponse.json({ rentals: parseStorage(storage) })
+  }),
+
+  // 募集中のレンタル情報を取得
+  http.get(endpoint('rental', 'available'), () => {
+    const storage = getStorage()
+    if (storage === null) {
+      return HttpResponse.json({ rentals: [] })
+    }
+    const rentals = parseStorage(storage)
+
+    const userStorage = getUserStorage()
+    if (userStorage === null) {
+      return HttpResponse.json({ rentals: [] })
+    }
+    const users = parseUserStorage(userStorage)
+
+    const batteryStorage = getBatteryStorage()
+    if (batteryStorage === null) {
+      return HttpResponse.json({ rentals: [] })
+    }
+    const batteries = parseBatteryStorage(batteryStorage)
+    const availableRentals = rentals
+      .filter(({ status }) => status === 'available')
+      .map((rental) => {
+        const battery = batteries.find(({ id }) => id === rental.batteryId)
+        const owner = users.find(({ id }) => id === battery?.ownerId)
+        return { rental, battery, owner }
+      })
+
+    return HttpResponse.json({ rentals: availableRentals })
   }),
 
   // idで指定されたレンタル情報を取得
