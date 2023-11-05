@@ -33,6 +33,26 @@ export const rentalHandlers = [
     return HttpResponse.json({ rental: target })
   }),
 
+  // batteryIdで指定されたレンタル情報を取得
+  http.get<{ batteryId: string }>(
+    endpoint('rental', 'battery', ':batteryId'),
+    ({ params }) => {
+      const { batteryId } = params
+      const storage = getStorage()
+      if (storage === null) {
+        return HttpResponse.json({ error: 'Rental Not Found' }, { status: 404 })
+      }
+
+      const data = parseStorage(storage)
+      const target = data.find((rental) => rental.batteryId === batteryId)
+      if (target === undefined) {
+        return HttpResponse.json({ error: 'Rental Not Found' }, { status: 404 })
+      }
+
+      return HttpResponse.json({ rental: target })
+    },
+  ),
+
   // レンタル情報を作成
   http.post<
     PathParams,

@@ -30,7 +30,7 @@ export const Start = () => {
     }
   }
 
-  const handleStartRentClick = async () => {
+  const handleStartRentClick = () => {
     if (!session?.isLoggedIn) {
       return navigate('/login')
     }
