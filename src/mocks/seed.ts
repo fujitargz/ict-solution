@@ -1,6 +1,6 @@
 import { Battery, User, endpoint } from './handlers'
 
-export const seed = () => {
+export const seed = (callback: () => void) => {
   localStorage.clear()
   sessionStorage.clear()
 
@@ -23,4 +23,5 @@ export const seed = () => {
     )
     .then((res) => res.json())
     .then(({ battery }) => battery as Battery)
+    .finally(() => callback())
 }

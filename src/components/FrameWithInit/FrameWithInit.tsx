@@ -1,9 +1,10 @@
 import { useMediaQuery } from '@mantine/hooks'
 import { Button, Center, Group, ScrollArea, Stack } from '@mantine/core'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
 import { seed } from '../../mocks/seed'
 
 export const FrameWithInit = () => {
+  const navigate = useNavigate()
   const isMobile = !useMediaQuery('(min-width: 640px')
   return isMobile ? (
     <Stack gap="0">
@@ -13,7 +14,7 @@ export const FrameWithInit = () => {
         </Center>
       </ScrollArea>
       <Group justify="flex-end" className="h-[50px]">
-        <Button onClick={seed}>初期化</Button>
+        <Button onClick={() => seed(() => navigate('/'))}>初期化</Button>
       </Group>
     </Stack>
   ) : (
@@ -25,7 +26,7 @@ export const FrameWithInit = () => {
           </Center>
         </ScrollArea.Autosize>
         <Group justify="flex-end" className="h-[50px]">
-          <Button onClick={seed}>初期化</Button>
+          <Button onClick={() => seed(() => navigate('/'))}>初期化</Button>
         </Group>
       </Stack>
     </div>
