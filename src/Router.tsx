@@ -11,6 +11,7 @@ import { FrameWithInit } from './components/FrameWithInit'
 import { FramwWithBack } from './components/FrameWithBack'
 import { FrameWithFooter } from './components/FrameWithFooter'
 import { Detail, detailLoader } from './pages/rentfrom/Detail'
+import { List as RentFromList, listLoader } from './pages/rentfrom/List'
 
 export const Router = createBrowserRouter(
   [
@@ -26,6 +27,11 @@ export const Router = createBrowserRouter(
         {
           path: '/rentfrom',
           element: <RentFrom />,
+        },
+        {
+          path: '/rentfrom/list',
+          loader: listLoader,
+          element: <RentFromList />,
         },
         {
           path: '/rentfrom/detail/:rentalId',
