@@ -16,7 +16,7 @@ export const Register = () => {
   const [session] = useSession()
   const navigate = useNavigate()
   const [name, setName] = useState('')
-  const [connector, setConnector] = useState('')
+  const [connector, setConnector] = useState('lightning')
   const [note, setNote] = useState('')
   const [err, setErr] = useState('')
 
