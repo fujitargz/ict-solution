@@ -10,6 +10,7 @@ import { Start as RentToStart } from './pages/rentto/Start'
 import { FrameWithInit } from './components/FrameWithInit'
 import { FramwWithBack } from './components/FrameWithBack'
 import { FrameWithFooter } from './components/FrameWithFooter'
+import { Detail, detailLoader } from './pages/rentfrom/Detail'
 
 export const Router = createBrowserRouter(
   [
@@ -25,6 +26,11 @@ export const Router = createBrowserRouter(
         {
           path: '/rentfrom',
           element: <RentFrom />,
+        },
+        {
+          path: '/rentfrom/detail/:rentalId',
+          loader: detailLoader,
+          element: <Detail />,
         },
         {
           path: '/rentto',

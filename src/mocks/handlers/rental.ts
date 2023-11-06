@@ -90,6 +90,55 @@ export const rentalHandlers = [
     },
   ),
 
+  // idで指定されたレンタル情報を関連情報まで含めて取得
+  http.get<{ rentalId: string }>(
+    endpoint('rental', 'detail', ':rentalId'),
+    ({ params }) => {
+      const { rentalId } = params
+      const storage = getStorage()
+      if (storage === null) {
+        return HttpResponse.json({ error: 'Rental Not Found' }, { status: 404 })
+      }
+      const rentals = parseStorage(storage)
+
+      const userStorage = getUserStorage()
+      if (userStorage === null) {
+        return HttpResponse.json({ error: 'Rental Not Found' }, { status: 404 })
+      }
+      const users = parseUserStorage(userStorage)
+
+      const batteryStorage = getBatteryStorage()
+      if (batteryStorage === null) {
+        return HttpResponse.json({ error: 'Rental Not Found' }, { status: 404 })
+      }
+      const batteries = parseBatteryStorage(batteryStorage)
+
+      const targetRental = rentals.find((rental) => rental.id === rentalId)
+      if (targetRental === undefined) {
+        return HttpResponse.json({ error: 'Rental Not Found' }, { status: 404 })
+      }
+      const targetBattery = batteries.find(
+        (battery) => battery.id === targetRental.batteryId,
+      )
+      if (targetBattery === undefined) {
+        return HttpResponse.json({ error: 'Rental Not Found' }, { status: 404 })
+      }
+      const targetOwner = users.find(
+        (user) => user.id === targetBattery.ownerId,
+      )
+      if (targetOwner === undefined) {
+        return HttpResponse.json({ error: 'Rental Not Found' }, { status: 404 })
+      }
+      const target = {
+        rental: targetRental,
+        battery: targetBattery,
+        owner: targetOwner,
+      }
+
+      return HttpResponse.json({ rental: target })
+    },
+  ),
+
   // レンタル情報を作成
   http.post<
     PathParams,

@@ -1,10 +1,11 @@
 import { Center, Group, Paper, Stack, Text } from '@mantine/core'
 import { useEffect, useState } from 'react'
 import { Battery, endpoint, Rental, User } from '../mocks/handlers'
+import { Link } from 'react-router-dom'
 
 export const RentFrom = () => {
   const [items, setItems] = useState<
-    { distance: string; owner: string; connector: string }[]
+    { rentalId: string; distance: string; owner: string; connector: string }[]
   >([])
 
   // https://qiita.com/kawanet/items/a2e111b17b8eb5ac859a
@@ -35,6 +36,7 @@ export const RentFrom = () => {
       .then((rentals) =>
         setItems(
           rentals.map(({ rental, battery, owner }) => ({
+            rentalId: rental.id,
             distance: calcDistance(
               parseFloat(rental.lat),
               parseFloat(rental.lng),
@@ -52,15 +54,15 @@ export const RentFrom = () => {
       <Center>
         <Text>借りる</Text>
       </Center>
-      {items.map(({ distance, owner, connector }, i) => (
+      {items.map(({ rentalId, distance, owner, connector }, i) => (
         <Paper
           key={i}
-          className="hover:cursor-pointer"
+          component={Link}
+          to={`/rentfrom/detail/${rentalId}`}
           shadow="xs"
           withBorder
           px="xl"
           py="md"
-          onClick={() => console.log('clicked')}
         >
           <Group>
             <Text>{distance}km</Text>
