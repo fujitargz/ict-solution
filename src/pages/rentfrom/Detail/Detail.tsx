@@ -1,15 +1,36 @@
-import { useLoaderData } from 'react-router-dom'
-import { Battery, Rental, User } from '../../../mocks/handlers'
+import { useLoaderData, Link, useNavigate } from 'react-router-dom'
+import { Battery, Rental, User, endpoint } from '../../../mocks/handlers'
 import { Button, Card, Center, Grid, Space, Stack, Text } from '@mantine/core'
 import { Map } from '../../../components/Map'
 import dayjs from 'dayjs'
+import { useSession } from '../../../hooks/useSession'
 
 export const Detail = () => {
+  const [session] = useSession()
+  const navigate = useNavigate()
   const { rental, battery, owner } = useLoaderData() as {
     rental: Rental
     battery: Battery
     owner: User
   }
+
+  const handleSendRequestClicked = () => {
+    if (session === undefined || !session.isLoggedIn) {
+      return navigate('/')
+    }
+    fetch(endpoint('rental', 'reserve', rental.id), {
+      body: JSON.stringify({ borrowerId: session.currentUser.id }),
+      method: 'PUT',
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error()
+        }
+        return navigate('rentfrom/request')
+      })
+      .catch(() => navigate('/'))
+  }
+
   return (
     <Stack mx="sm">
       <Card withBorder>
@@ -40,7 +61,13 @@ export const Detail = () => {
         <Map lat={parseFloat(rental.lat)} lng={parseFloat(rental.lng)} />
       </Center>
       <Space />
-      <Button disabled>リクエストを送信</Button>
+      <Button
+        component={Link}
+        to="rentfrom/request"
+        onClick={handleSendRequestClicked}
+      >
+        リクエストを送信
+      </Button>
     </Stack>
   )
 }

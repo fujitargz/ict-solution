@@ -12,6 +12,10 @@ import { FramwWithBack } from './components/FrameWithBack'
 import { FrameWithFooter } from './components/FrameWithFooter'
 import { Detail, detailLoader } from './pages/rentfrom/Detail'
 import { List as RentFromList, listLoader } from './pages/rentfrom/List'
+import {
+  Request as RentFromRequest,
+  requestLoader,
+} from './pages/rentfrom/Request'
 
 export const Router = createBrowserRouter(
   [
@@ -32,6 +36,11 @@ export const Router = createBrowserRouter(
           path: '/rentfrom/list',
           loader: listLoader,
           element: <RentFromList />,
+        },
+        {
+          path: '/rentfrom/request',
+          loader: requestLoader,
+          element: <RentFromRequest />,
         },
         {
           path: '/rentfrom/detail/:rentalId',

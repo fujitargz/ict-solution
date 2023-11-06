@@ -10,7 +10,9 @@ export const RentFrom = () => {
       <Button component={Link} to="/rentfrom/list">
         一覧で探す
       </Button>
-      <Button disabled>リクエストを確認する</Button>
+      <Button component={Link} to="/rentfrom/request">
+        リクエストを確認する
+      </Button>
     </Stack>
   )
 }

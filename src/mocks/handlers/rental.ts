@@ -53,6 +53,56 @@ export const rentalHandlers = [
     return HttpResponse.json({ rentals: availableRentals })
   }),
 
+  // userIdで指定されたユーザがリクエスト中のレンタル情報を取得
+  http.get<{ userId: string }>(
+    endpoint('rental', 'request', ':userId'),
+    ({ params }) => {
+      const { userId } = params
+      const storage = getStorage()
+      if (storage === null) {
+        return HttpResponse.json({ error: 'Rental Not Found' }, { status: 404 })
+      }
+      const rentals = parseStorage(storage)
+
+      const userStorage = getUserStorage()
+      if (userStorage === null) {
+        return HttpResponse.json({ error: 'Rental Not Found' }, { status: 404 })
+      }
+      const users = parseUserStorage(userStorage)
+
+      const batteryStorage = getBatteryStorage()
+      if (batteryStorage === null) {
+        return HttpResponse.json({ error: 'Rental Not Found' }, { status: 404 })
+      }
+      const batteries = parseBatteryStorage(batteryStorage)
+      const targetRental = rentals
+        .filter(({ status }) => status === 'reserved')
+        .find(({ borrowerId }) => borrowerId === userId)
+      if (targetRental === undefined) {
+        return HttpResponse.json({ error: 'Rental Not Found' }, { status: 404 })
+      }
+      const targetBattery = batteries.find(
+        ({ id }) => id === targetRental.batteryId,
+      )
+      if (targetBattery === undefined) {
+        return HttpResponse.json({ error: 'Rental Not Found' }, { status: 404 })
+      }
+      const targetOwner = users.find(({ id }) => id === targetBattery.ownerId)
+
+      if (targetOwner === undefined) {
+        return HttpResponse.json({ error: 'Rental Not Found' }, { status: 404 })
+      }
+
+      return HttpResponse.json({
+        rental: {
+          rental: targetRental,
+          battery: targetBattery,
+          owner: targetOwner,
+        },
+      })
+    },
+  ),
+
   // idで指定されたレンタル情報を取得
   http.get<{ id: string }>(endpoint('rental', ':id'), ({ params }) => {
     const { id } = params
@@ -185,38 +235,41 @@ export const rentalHandlers = [
     endpoint('rental', 'reserve', ':id'),
     ({ params, request }) => {
       const { id } = params
-      request.json().then((body) => {
-        const storage = getStorage()
-        if (storage === null) {
-          return HttpResponse.json(
-            { error: 'Rental Not Found' },
-            { status: 404 },
-          )
-        }
+      return request
+        .clone()
+        .json()
+        .then((body) => {
+          const storage = getStorage()
+          if (storage === null) {
+            return HttpResponse.json(
+              { error: 'Rental Not Found' },
+              { status: 404 },
+            )
+          }
 
-        const data = parseStorage(storage)
-        const target = data.find(
-          (rental) => rental.id === id && rental.status === 'available',
-        )
-        if (target === undefined) {
-          return HttpResponse.json(
-            { error: 'Rental Not Found' },
-            { status: 404 },
+          const data = parseStorage(storage)
+          const target = data.find(
+            (rental) => rental.id === id && rental.status === 'available',
           )
-        }
+          if (target === undefined) {
+            return HttpResponse.json(
+              { error: 'Rental Not Found' },
+              { status: 404 },
+            )
+          }
 
-        const updatedRental: Rental = {
-          ...target,
-          borrowerId: body.borrowerId,
-          status: 'reserved',
-        }
-        setStorage(
-          JSON.stringify(
-            data.map((rental) => (rental.id === id ? updatedRental : rental)),
-          ),
-        )
-        return HttpResponse.json({ rental: updatedRental })
-      })
+          const updatedRental: Rental = {
+            ...target,
+            borrowerId: body.borrowerId,
+            status: 'reserved',
+          }
+          setStorage(
+            JSON.stringify(
+              data.map((rental) => (rental.id === id ? updatedRental : rental)),
+            ),
+          )
+          return HttpResponse.json({ rental: updatedRental })
+        })
     },
   ),
 
