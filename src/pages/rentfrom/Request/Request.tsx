@@ -4,7 +4,15 @@ import { Battery, Rental, User } from '../../../mocks/handlers'
 import { Map } from '../../../components/Map'
 
 export const Request = () => {
-  const { rental, owner } = useLoaderData() as {
+  const data = useLoaderData()
+  if (data === null) {
+    return (
+      <Stack mx="sm">
+        <Text>リクエストはありません</Text>
+      </Stack>
+    )
+  }
+  const { rental, owner } = data as {
     rental: Rental
     battery: Battery
     owner: User

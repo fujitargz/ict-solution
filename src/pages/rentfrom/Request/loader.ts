@@ -20,5 +20,6 @@ export const requestLoader: LoaderFunction = async () => {
       (body) =>
         body.rental as { rental: Rental; battery: Battery; owner: User },
     )
+    .catch(() => null)
   return rental
 }
