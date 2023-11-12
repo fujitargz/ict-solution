@@ -75,10 +75,15 @@ export const RentTo = () => {
       <Space />
       <Button onClick={() => navigate('/rentto/start')}>貸し出し開始</Button>
       <Button onClick={handleEndRentButtonClick}>貸し出し終了</Button>
+      <Space />
       <Button onClick={() => navigate('/battery/register')}>
         バッテリーの登録
       </Button>
       <Button onClick={handleRemoveButteryButtonClick}>バッテリーの削除</Button>
+      <Space />
+      <Button onClick={() => navigate('/rentto/request/list')}>
+        リクエスト
+      </Button>
     </Stack>
   )
 }

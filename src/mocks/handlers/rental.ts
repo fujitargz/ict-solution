@@ -103,6 +103,66 @@ export const rentalHandlers = [
     },
   ),
 
+  // userIdで指定されたユーザがリクエストされているレンタル情報を取得
+  http.get<{ userId: string }>(
+    endpoint('rental', 'requested', ':userId'),
+    ({ params }) => {
+      const { userId } = params
+      const storage = getStorage()
+      if (storage === null) {
+        return HttpResponse.json({ error: 'Rental Not Found' }, { status: 404 })
+      }
+      const rentals = parseStorage(storage)
+
+      const userStorage = getUserStorage()
+      if (userStorage === null) {
+        return HttpResponse.json({ error: 'Rental Not Found' }, { status: 404 })
+      }
+      const users = parseUserStorage(userStorage)
+
+      const batteryStorage = getBatteryStorage()
+      if (batteryStorage === null) {
+        return HttpResponse.json({ error: 'Rental Not Found' }, { status: 404 })
+      }
+      const batteries = parseBatteryStorage(batteryStorage)
+
+      const targetOwner = users.find(({ id }) => id === userId)
+      if (targetOwner === undefined) {
+        return HttpResponse.json({ error: 'Rental Not Found' }, { status: 404 })
+      }
+
+      const targetBattery = batteries.find(
+        ({ ownerId }) => ownerId === targetOwner.id,
+      )
+      if (targetBattery === undefined) {
+        return HttpResponse.json({ error: 'Rental Not Found' }, { status: 404 })
+      }
+
+      const targetRental = rentals
+        .filter(({ status }) => status === 'reserved')
+        .find(({ batteryId }) => batteryId === targetBattery.id)
+      if (targetRental === undefined) {
+        return HttpResponse.json({ error: 'Rental Not Found' }, { status: 404 })
+      }
+
+      const targetBorrower = users.find(
+        ({ id }) => id === targetRental.borrowerId,
+      )
+      if (targetBorrower === undefined) {
+        return HttpResponse.json({ error: 'Rental Not Found' }, { status: 404 })
+      }
+
+      return HttpResponse.json({
+        rental: {
+          rental: targetRental,
+          battery: targetBattery,
+          owner: targetOwner,
+          borrower: targetBorrower,
+        },
+      })
+    },
+  ),
+
   // idで指定されたレンタル情報を取得
   http.get<{ id: string }>(endpoint('rental', ':id'), ({ params }) => {
     const { id } = params

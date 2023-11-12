@@ -16,6 +16,7 @@ import {
   Request as RentFromRequest,
   requestLoader,
 } from './pages/rentfrom/Request'
+import { RequestList, requestListLoader } from './pages/rentto/RequestList'
 
 export const Router = createBrowserRouter(
   [
@@ -54,6 +55,11 @@ export const Router = createBrowserRouter(
         {
           path: '/rentto/start',
           element: <RentToStart />,
+        },
+        {
+          path: '/rentto/request/list',
+          loader: requestListLoader,
+          element: <RequestList />,
         },
         { path: '/battery/register', element: <BatteryRegister /> },
       ],
