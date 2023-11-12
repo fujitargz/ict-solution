@@ -17,6 +17,10 @@ import {
   requestLoader,
 } from './pages/rentfrom/Request'
 import { RequestList, requestListLoader } from './pages/rentto/RequestList'
+import {
+  StartNumCheck,
+  startNumCheckLoader,
+} from './pages/rentto/StartNumCheck'
 
 export const Router = createBrowserRouter(
   [
@@ -60,6 +64,11 @@ export const Router = createBrowserRouter(
           path: '/rentto/request/list',
           loader: requestListLoader,
           element: <RequestList />,
+        },
+        {
+          path: '/rentto/startnumcheck',
+          loader: startNumCheckLoader,
+          element: <StartNumCheck />,
         },
         { path: '/battery/register', element: <BatteryRegister /> },
       ],

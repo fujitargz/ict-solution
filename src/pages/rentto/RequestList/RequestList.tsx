@@ -1,9 +1,10 @@
-import { Battery, Rental, User } from '../../../mocks/handlers'
+import { Battery, Rental, User, endpoint } from '../../../mocks/handlers'
 import { Button, Card, Center, Space, Stack, Text } from '@mantine/core'
-import { useLoaderData } from 'react-router-dom'
+import { useLoaderData, useNavigate } from 'react-router-dom'
 
 export const RequestList = () => {
   const data = useLoaderData()
+  const navigate = useNavigate()
   if (data === null) {
     return (
       <Stack>
@@ -15,12 +16,25 @@ export const RequestList = () => {
       </Stack>
     )
   }
-  const { borrower } = data as {
+  const { rental, borrower } = data as {
     rental: Rental
     battery: Battery
     owner: User
     borrower: User
   }
+
+  const handleApproveButtonClick = () => {
+    fetch(endpoint('rental', 'approve', rental.id), { method: 'PUT' }).then(
+      (res) => {
+        if (!res.ok) {
+          navigate('/rentto')
+        } else {
+          navigate('/rentto/startnumcheck')
+        }
+      },
+    )
+  }
+
   return (
     <Stack>
       <Center>
@@ -32,10 +46,8 @@ export const RequestList = () => {
         <Text>{borrower.name}さん</Text>
       </Card>
       <Space />
-      <Button disabled>リクエストを承認する</Button>
-      <Button disabled color="red">
-        リクエストを拒否する
-      </Button>
+      <Button onClick={handleApproveButtonClick}>リクエストを承認する</Button>
+      <Button color="red">リクエストを拒否する</Button>
     </Stack>
   )
 }
