@@ -1,9 +1,11 @@
 import { Button, Card, Center, PinInput, Stack, Text } from '@mantine/core'
-import { useLoaderData } from 'react-router-dom'
-import { Battery, Rental, User } from '../../../mocks/handlers'
+import { useLoaderData, useNavigate } from 'react-router-dom'
+import { Battery, Rental, User, endpoint } from '../../../mocks/handlers'
 import dayjs from 'dayjs'
+import { useState } from 'react'
 
 export const StartNumCheck = () => {
+  const navigate = useNavigate()
   const data = useLoaderData()
   const { rental, battery } = data as {
     rental: Rental
@@ -11,6 +13,23 @@ export const StartNumCheck = () => {
     owner: User
     borrower: User
   }
+
+  const [started, setStarted] = useState(false)
+  const [otp, setOtp] = useState('')
+
+  const handleStartRentButtonClick = () => {
+    fetch(endpoint('rental', 'start', rental.id), {
+      method: 'PUT',
+      body: JSON.stringify({ otp }),
+    }).then((res) => {
+      if (!res.ok) {
+        navigate('/rentto')
+      } else {
+        setStarted(true)
+      }
+    })
+  }
+
   return (
     <Stack>
       <Center>
@@ -32,7 +51,12 @@ export const StartNumCheck = () => {
             <Text>パスコード入力フォーム</Text>
           </Center>
           <Center>
-            <PinInput placeholder="0" length={6} />
+            <PinInput
+              placeholder="0"
+              length={6}
+              value={otp}
+              onChange={(e) => setOtp(e)}
+            />
           </Center>
           <Center>
             <Text>
@@ -43,7 +67,11 @@ export const StartNumCheck = () => {
           </Center>
         </Stack>
       </Card>
-      <Button disabled>パスコードを確認</Button>
+      {started ? (
+        <Button color="green">貸し出し開始</Button>
+      ) : (
+        <Button onClick={handleStartRentButtonClick}>パスコードを確認</Button>
+      )}
     </Stack>
   )
 }

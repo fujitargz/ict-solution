@@ -424,6 +424,56 @@ export const rentalHandlers = [
     },
   ),
 
+  // idで指定されたレンタル情報を更新（貸し出し開始）
+  http.put<{ id: string }, { otp: string }>(
+    endpoint('rental', 'start', ':id'),
+    ({ params, request }) => {
+      const { id } = params
+      return request
+        .clone()
+        .json()
+        .then((body) => {
+          const storage = getStorage()
+          if (storage === null) {
+            return HttpResponse.json(
+              { error: 'Rental Not Found' },
+              { status: 404 },
+            )
+          }
+
+          const data = parseStorage(storage)
+          const target = data.find(
+            (rental) =>
+              rental.id === id &&
+              rental.status === 'approved' &&
+              rental.otp === body.otp,
+          )
+          if (target === undefined) {
+            return HttpResponse.json(
+              { error: 'Rental Not Found' },
+              { status: 404 },
+            )
+          }
+
+          const ary = new Uint16Array(1)
+          crypto.getRandomValues(ary)
+          const otp = ary[0].toString().padEnd(6, '0').slice(0, 6)
+
+          const updatedRental: Rental = {
+            ...target,
+            otp,
+            status: 'started',
+          }
+          setStorage(
+            JSON.stringify(
+              data.map((rental) => (rental.id === id ? updatedRental : rental)),
+            ),
+          )
+          return HttpResponse.json({ rental: updatedRental })
+        })
+    },
+  ),
+
   // idで指定されたレンタル情報を削除
   http.delete<{ id: string }>(endpoint('rental', ':id'), ({ params }) => {
     const { id } = params
