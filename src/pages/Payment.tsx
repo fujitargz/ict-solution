@@ -9,8 +9,10 @@ import {
   Title,
 } from '@mantine/core'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export const Payment = () => {
+  const navigate = useNavigate()
   const [paid, setPaid] = useState(false)
 
   return (
@@ -47,7 +49,9 @@ export const Payment = () => {
           </Center>
         </Stack>
       </Card>
-      <Button disabled={!paid}>次へ</Button>
+      <Button disabled={!paid} onClick={() => navigate('/rentfrom/review')}>
+        次へ
+      </Button>
     </Stack>
   )
 }

@@ -32,6 +32,10 @@ import {
   returnNumCheckLoader,
 } from './pages/rentfrom/ReturnNumCheck'
 import { Payment } from './pages/Payment'
+import {
+  RentFromReview,
+  rentFromReviewLoader,
+} from './pages/rentfrom/RentFromReview'
 
 export const Router = createBrowserRouter(
   [
@@ -69,6 +73,11 @@ export const Router = createBrowserRouter(
           path: '/rentfrom/returnnumcheck',
           loader: returnNumCheckLoader,
           element: <ReturnNumCheck />,
+        },
+        {
+          path: '/rentfrom/review',
+          loader: rentFromReviewLoader,
+          element: <RentFromReview />,
         },
         {
           path: '/rentto',
