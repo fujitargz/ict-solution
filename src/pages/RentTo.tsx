@@ -87,6 +87,9 @@ export const RentTo = () => {
       <Button onClick={() => navigate('/rentto/startnumcheck')}>
         番号入力（貸す）
       </Button>
+      <Button onClick={() => navigate('/rentto/endnum')}>
+        番号表示（返す）
+      </Button>
     </Stack>
   )
 }

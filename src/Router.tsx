@@ -21,6 +21,10 @@ import {
   StartNumCheck,
   startNumCheckLoader,
 } from './pages/rentto/StartNumCheck'
+import {
+  ShowReturnNum,
+  showReturnNumLoader,
+} from './pages/rentto/ShowReturnNum'
 
 export const Router = createBrowserRouter(
   [
@@ -69,6 +73,11 @@ export const Router = createBrowserRouter(
           path: '/rentto/startnumcheck',
           loader: startNumCheckLoader,
           element: <StartNumCheck />,
+        },
+        {
+          path: '/rentto/endnum',
+          loader: showReturnNumLoader,
+          element: <ShowReturnNum />,
         },
         { path: '/battery/register', element: <BatteryRegister /> },
       ],
