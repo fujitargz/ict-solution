@@ -1,5 +1,14 @@
 import { Battery, Rental, User, endpoint } from '../../../mocks/handlers'
-import { Button, Card, Center, Space, Stack, Text } from '@mantine/core'
+import {
+  Button,
+  Card,
+  Center,
+  Group,
+  Rating,
+  Space,
+  Stack,
+  Text,
+} from '@mantine/core'
 import { useLoaderData, useNavigate } from 'react-router-dom'
 
 export const RequestList = () => {
@@ -43,7 +52,10 @@ export const RequestList = () => {
       <Space />
       <Text>リクエストが届いています</Text>
       <Card withBorder>
-        <Text>{borrower.name}さん</Text>
+        <Group>
+          <Rating value={parseInt(borrower.review)} readOnly />
+          <Text>{borrower.name}さん</Text>
+        </Group>
       </Card>
       <Space />
       <Button onClick={handleApproveButtonClick}>リクエストを承認する</Button>

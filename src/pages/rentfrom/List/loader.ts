@@ -19,6 +19,7 @@ export const listLoader: LoaderFunction = async () => {
         distance: calcDistance(parseFloat(rental.lat), parseFloat(rental.lng)),
         owner: owner.name,
         connector: battery.connector,
+        review: owner.review,
       })),
     )
   return result

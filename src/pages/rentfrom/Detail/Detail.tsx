@@ -1,6 +1,16 @@
 import { useLoaderData, Link, useNavigate } from 'react-router-dom'
 import { Battery, Rental, User, endpoint } from '../../../mocks/handlers'
-import { Button, Card, Center, Grid, Space, Stack, Text } from '@mantine/core'
+import {
+  Button,
+  Card,
+  Center,
+  Grid,
+  Group,
+  Rating,
+  Space,
+  Stack,
+  Text,
+} from '@mantine/core'
 import { Map } from '../../../components/Map'
 import dayjs from 'dayjs'
 import { useSession } from '../../../hooks/useSession'
@@ -34,7 +44,10 @@ export const Detail = () => {
   return (
     <Stack mx="sm">
       <Card withBorder>
-        <Text>{owner.name}</Text>
+        <Group>
+          <Rating value={parseInt(owner.review)} readOnly />
+          <Text>{owner.name}</Text>
+        </Group>
       </Card>
       <Card withBorder>
         <Grid>

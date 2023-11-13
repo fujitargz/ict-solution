@@ -1,4 +1,4 @@
-import { Center, Group, Paper, Stack, Text } from '@mantine/core'
+import { Center, Group, Paper, Rating, Stack, Text } from '@mantine/core'
 import { Link, useLoaderData } from 'react-router-dom'
 
 export const List = () => {
@@ -7,6 +7,7 @@ export const List = () => {
     distance: string
     owner: string
     connector: string
+    review: string
   }[]
 
   return (
@@ -14,7 +15,7 @@ export const List = () => {
       <Center>
         <Text>借りる</Text>
       </Center>
-      {items.map(({ rentalId, distance, owner, connector }, i) => (
+      {items.map(({ rentalId, distance, owner, connector, review }, i) => (
         <Paper
           key={i}
           component={Link}
@@ -29,6 +30,7 @@ export const List = () => {
             <Text>{owner}さん</Text>
           </Group>
           <Text>対応：{connector}</Text>
+          <Rating value={parseInt(review)} readOnly />
         </Paper>
       ))}
     </Stack>

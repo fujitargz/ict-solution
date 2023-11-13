@@ -27,6 +27,8 @@ export const Root = () => {
         return '募集中'
       case 'reserved':
         return 'レンタル待ち'
+      case 'started':
+        return 'レンタル中'
       default:
         return '-'
     }
