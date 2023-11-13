@@ -8,10 +8,14 @@ export const RentFrom = () => {
         <Text>借りる</Text>
       </Center>
       <Button component={Link} to="/rentfrom/list">
-        一覧で探す
+        募集を探す
       </Button>
       <Button component={Link} to="/rentfrom/request">
-        リクエストを確認する
+        リクエスト確認
+      </Button>
+      <Button disabled>番号入力（返す）</Button>
+      <Button component={Link} to="/help">
+        何かあった時は...
       </Button>
     </Stack>
   )

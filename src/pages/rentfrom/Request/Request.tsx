@@ -44,7 +44,7 @@ export const Request = () => {
           </Center>
         </Stack>
       </Card>
-      <Button disabled>リクエストを取り消し</Button>
+      <Button>リクエストを取り消し</Button>
     </Stack>
   )
 }

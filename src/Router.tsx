@@ -26,6 +26,7 @@ import {
   showReturnNumLoader,
 } from './pages/rentto/ShowReturnNum'
 import { RentToReview } from './pages/rentto/RentToReview'
+import { Help } from './pages/Help'
 
 export const Router = createBrowserRouter(
   [
@@ -38,6 +39,7 @@ export const Router = createBrowserRouter(
           path: '/',
           element: <Root />,
         },
+        { path: '/help', element: <Help /> },
         {
           path: '/rentfrom',
           element: <RentFrom />,
