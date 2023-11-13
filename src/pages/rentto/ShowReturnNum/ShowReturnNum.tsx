@@ -1,9 +1,10 @@
 import { Button, Card, Center, Grid, Stack, Text, Title } from '@mantine/core'
-import { useLoaderData } from 'react-router-dom'
+import { useLoaderData, useNavigate } from 'react-router-dom'
 import { Battery, Rental, User } from '../../../mocks/handlers'
 import { Map } from '../../../components/Map'
 
 export const ShowReturnNum = () => {
+  const navigate = useNavigate()
   const data = useLoaderData()
   const { rental, borrower } = data as {
     rental: Rental
@@ -38,7 +39,9 @@ export const ShowReturnNum = () => {
           </Center>
         </Stack>
       </Card>
-      <Button disabled>次へ</Button>
+      <Button onClick={() => navigate(`/rentto/review/${borrower.id}`)}>
+        次へ
+      </Button>
     </Stack>
   )
 }

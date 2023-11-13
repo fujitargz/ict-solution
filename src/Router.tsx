@@ -25,6 +25,7 @@ import {
   ShowReturnNum,
   showReturnNumLoader,
 } from './pages/rentto/ShowReturnNum'
+import { RentToReview } from './pages/rentto/RentToReview'
 
 export const Router = createBrowserRouter(
   [
@@ -78,6 +79,10 @@ export const Router = createBrowserRouter(
           path: '/rentto/endnum',
           loader: showReturnNumLoader,
           element: <ShowReturnNum />,
+        },
+        {
+          path: '/rentto/review/:borrowerId',
+          element: <RentToReview />,
         },
         { path: '/battery/register', element: <BatteryRegister /> },
       ],

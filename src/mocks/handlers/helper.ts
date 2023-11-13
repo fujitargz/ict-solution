@@ -17,6 +17,7 @@ export type User = {
   id: string
   name: string
   password: string
+  review: string
 }
 
 export type Battery = {

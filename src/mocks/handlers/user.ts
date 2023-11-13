@@ -40,7 +40,11 @@ export const userHandlers = [
         .clone()
         .json()
         .then((body) => {
-          const newUser: User = { id: crypto.randomUUID(), ...body }
+          const newUser: User = {
+            id: crypto.randomUUID(),
+            review: '0',
+            ...body,
+          }
           const storage = getStorage()
           if (storage === null) {
             setStorage(JSON.stringify([newUser]))
@@ -77,6 +81,7 @@ export const userHandlers = [
 
         const updatedUser: User = {
           id: target.id,
+          review: target.review,
           name: body.name || target.name,
           password: body.password || target.password,
         }
@@ -87,6 +92,46 @@ export const userHandlers = [
         )
         return HttpResponse.json({ user: updatedUser })
       })
+    },
+  ),
+
+  // idで指定されたユーザのレビューを更新
+  http.put<{ id: string }, { review: string }>(
+    endpoint('user', 'review', ':id'),
+    ({ params, request }) => {
+      const { id } = params
+      return request
+        .clone()
+        .json()
+        .then((body) => {
+          const storage = getStorage()
+          if (storage === null) {
+            return HttpResponse.json(
+              { error: 'User Not Found' },
+              { status: 404 },
+            )
+          }
+
+          const data = parseStorage(storage)
+          const target = data.find((user) => user.id === id)
+          if (target === undefined) {
+            return HttpResponse.json(
+              { error: 'User Not Found' },
+              { status: 404 },
+            )
+          }
+
+          const updatedUser: User = {
+            ...target,
+            review: body.review,
+          }
+          setStorage(
+            JSON.stringify(
+              data.map((user) => (user.id === id ? updatedUser : user)),
+            ),
+          )
+          return HttpResponse.json({ user: updatedUser })
+        })
     },
   ),
 
