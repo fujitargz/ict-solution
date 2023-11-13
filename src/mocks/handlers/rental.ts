@@ -53,7 +53,7 @@ export const rentalHandlers = [
     return HttpResponse.json({ rentals: availableRentals })
   }),
 
-  // userIdで指定されたユーザがリクエスト中のレンタル情報を取得
+  // userIdで指定されたユーザがリクエスト中のレンタル情報を取得（承認済みも含む）
   http.get<{ userId: string }>(
     endpoint('rental', 'request', ':userId'),
     ({ params }) => {
@@ -76,7 +76,7 @@ export const rentalHandlers = [
       }
       const batteries = parseBatteryStorage(batteryStorage)
       const targetRental = rentals
-        .filter(({ status }) => status === 'reserved')
+        .filter(({ status }) => status === 'reserved' || status === 'approved')
         .find(({ borrowerId }) => borrowerId === userId)
       if (targetRental === undefined) {
         return HttpResponse.json({ error: 'Rental Not Found' }, { status: 404 })
