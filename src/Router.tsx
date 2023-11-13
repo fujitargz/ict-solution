@@ -27,6 +27,11 @@ import {
 } from './pages/rentto/ShowReturnNum'
 import { RentToReview } from './pages/rentto/RentToReview'
 import { Help } from './pages/Help'
+import {
+  ReturnNumCheck,
+  returnNumCheckLoader,
+} from './pages/rentfrom/ReturnNumCheck'
+import { Payment } from './pages/Payment'
 
 export const Router = createBrowserRouter(
   [
@@ -40,6 +45,7 @@ export const Router = createBrowserRouter(
           element: <Root />,
         },
         { path: '/help', element: <Help /> },
+        { path: '/payment', element: <Payment /> },
         {
           path: '/rentfrom',
           element: <RentFrom />,
@@ -58,6 +64,11 @@ export const Router = createBrowserRouter(
           path: '/rentfrom/detail/:rentalId',
           loader: detailLoader,
           element: <Detail />,
+        },
+        {
+          path: '/rentfrom/returnnumcheck',
+          loader: returnNumCheckLoader,
+          element: <ReturnNumCheck />,
         },
         {
           path: '/rentto',

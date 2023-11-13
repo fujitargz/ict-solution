@@ -13,7 +13,9 @@ export const RentFrom = () => {
       <Button component={Link} to="/rentfrom/request">
         リクエスト確認
       </Button>
-      <Button disabled>番号入力（返す）</Button>
+      <Button component={Link} to="/rentfrom/returnnumcheck">
+        番号入力（返す）
+      </Button>
       <Button component={Link} to="/help">
         何かあった時は...
       </Button>
